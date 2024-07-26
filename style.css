@@ -1,0 +1,113 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+}
+
+.root-color-text{
+  background: -webkit-linear-gradient(to right, #fc5c7d, #6a82fb);
+  background: linear-gradient(to right, #fc5c7d, #6a82fb);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+body {
+  color: #fff;
+  background: #2b2a28;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* title */
+.calendar-container {
+  border: 1px solid;
+  padding: 20px 50px 50px 50px;
+  width: 450px;
+}
+.name-calendar{
+  text-align: center;
+}
+.name-calendar > h1 {
+  font-size: 50px;
+  letter-spacing: 5px;
+}
+.calendar{
+  font-size: 35px;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.year{
+  font-size: 40px;
+}
+
+/* data */
+.data-box{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.navigate{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.month{
+  text-align: center;
+  margin: 10px 0;
+}
+.arrow{
+  color: #fff;
+  background: transparent;
+  border: none;
+  font-size: 35px;
+  cursor: pointer;
+}
+.weeks{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 25px;
+
+}
+.days-name{
+  color: #fc5c7d;
+  text-align: center;
+}
+.days{
+  text-align: center;
+}
+.day{
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 7px 0;
+}
+.active-day{
+  background: #fc5c7d;
+  color: #2b2a28;
+}
+.like-active-day{
+  background: #6a82fb;
+  color: #2b2a28;
+}
+
+.btn-reset{
+  position: absolute;
+  bottom: -30px;
+  padding: 5px;
+  border-radius: 5px;
+  color: #fc5c7d;
+  font-weight: 700;
+  background: #fff;
+  cursor: pointer;
+}
+.btn-reset:hover{
+  background: #fc5c7d;
+  color: #fff;
+}
