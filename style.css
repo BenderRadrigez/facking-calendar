@@ -5,7 +5,7 @@
   list-style: none;
 }
 
-.root-color-text{
+.root-color-text {
   background: -webkit-linear-gradient(to right, #fc5c7d, #6a82fb);
   background: linear-gradient(to right, #fc5c7d, #6a82fb);
   background-clip: text;
@@ -19,6 +19,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+}
+
+.language{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  border-radius: 10px;
+  background: #fff;
+  color: #6a82fb;
 }
 
 /* title */
@@ -27,77 +38,76 @@ body {
   padding: 20px 50px 50px 50px;
   width: 450px;
 }
-.name-calendar{
+.name-calendar {
   text-align: center;
 }
 .name-calendar > h1 {
   font-size: 50px;
   letter-spacing: 5px;
 }
-.calendar{
+.calendar {
   font-size: 35px;
   letter-spacing: 2px;
   line-height: 1;
 }
-.year{
+.year {
   font-size: 40px;
 }
 
 /* data */
-.data-box{
+.data-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
 }
-.navigate{
+.navigate {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 20px;
 }
-.month{
+.month {
   text-align: center;
   margin: 10px 0;
 }
-.arrow{
+.arrow {
   color: #fff;
   background: transparent;
   border: none;
   font-size: 35px;
   cursor: pointer;
 }
-.weeks{
+.weeks {
   width: 100%;
   display: flex;
   justify-content: space-between;
   font-size: 25px;
-
 }
-.days-name{
+.days-name {
   color: #fc5c7d;
   text-align: center;
 }
-.days{
+.days {
   text-align: center;
 }
-.day{
+.day {
   display: block;
   width: 30px;
   height: 30px;
   border-radius: 50%;
   margin: 7px 0;
 }
-.active-day{
+.active-day {
   background: #fc5c7d;
   color: #2b2a28;
 }
-.like-active-day{
+.like-active-day {
   background: #6a82fb;
   color: #2b2a28;
 }
 
-.btn-reset{
+.btn-reset {
   position: absolute;
   bottom: -30px;
   padding: 5px;
@@ -107,7 +117,7 @@ body {
   background: #fff;
   cursor: pointer;
 }
-.btn-reset:hover{
+.btn-reset:hover {
   background: #fc5c7d;
   color: #fff;
 }
