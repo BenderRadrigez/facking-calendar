@@ -1,5 +1,5 @@
 const dataBox = document.querySelector(".data-box");
-const calendarContainer = document.querySelector('.calendar-container');
+const calendarContainer = document.querySelector(".calendar-container");
 const navigate = document.querySelector(".navigate");
 const year = document.querySelector(".year");
 const castomTitle = document.querySelector(".castom-title");
@@ -168,7 +168,7 @@ function getDate() {
     );
 }
 
-function nextMonth(){
+function nextMonth() {
   actualDate.month++;
   if (actualDate.month > 12) {
     actualDate.month = 1;
@@ -180,7 +180,7 @@ function nextMonth(){
   removeCalendar();
   makeCalendar(makeMonth(actualDate.year, actualDate.month));
 }
-function prevMonth(){
+function prevMonth() {
   actualDate.month--;
   if (actualDate.month < 1) {
     actualDate.month = 12;
@@ -192,6 +192,7 @@ function prevMonth(){
   removeCalendar();
   makeCalendar(makeMonth(actualDate.year, actualDate.month));
 }
+
 //базовая загрузка
 names.daysInMonth[1] = actualDate.year % 4 == 0 ? 29 : 28;
 year.innerHTML = actualDate.year;
@@ -200,10 +201,10 @@ makeCalendar(makeMonth(actualDate.year, actualDate.month));
 
 // ну и кнопки, тут и так понятно
 btnNext.addEventListener("click", () => {
-  nextMonth()
+  nextMonth();
 });
 btnPrev.addEventListener("click", () => {
- prevMonth()
+  prevMonth();
 });
 btnReset.addEventListener("click", () => {
   names.daysInMonth[1] = actualDate.year % 4 == 0 ? 29 : 28;
@@ -212,30 +213,4 @@ btnReset.addEventListener("click", () => {
   makeTitle(actualDate.month);
   removeCalendar();
   makeCalendar(makeMonth(actualDate.year, actualDate.month));
-});
-
-// добавил свайпы
-calendarContainer.addEventListener('DOMContentLoaded', () => {
-  let startX, startY, endX, endY;
-
-  calendarContainer.addEventListener('touchstart', function(e) {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-  }, false);
-
-  calendarContainer.addEventListener('touchmove', function(e) {
-      endX = e.touches[0].clientX;
-      endY = e.touches[0].clientY;
-  }, false);
-
-  calendarContainer.addEventListener('touchend', function() {
-      let diffX = endX - startX;
-      if (diffX > 0) {
-        nextMonth()
-        // действие при свайпе вправо
-    } else {
-        prevMonth()
-        // действие при свайпе влево
-    }
-  }, false);
 });
