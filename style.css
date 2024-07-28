@@ -35,8 +35,8 @@ body {
 /* title */
 .container {
   border: 1px solid;
-  padding: 20px 50px 50px 50px;
-  width: 450px;
+  padding: 20px 40px 50px 40px;
+  width: 430px;
   max-height: 490px;
 }
 .title {
