@@ -1,9 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&family=Merriweather:wght@300&family=Yeseva+One&display=swap");
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   list-style: none;
 }
+.merriweather-light {
+  font-family: "Merriweather", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+
 
 .root-color-text {
   background: -webkit-linear-gradient(to right, #fc5c7d, #6a82fb);
@@ -17,35 +26,27 @@ body {
   background: #2b2a28;
   height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
 }
 
-.language{
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 10px;
-  border-radius: 10px;
-  background: #fff;
-  color: #6a82fb;
-}
-
 /* title */
-.calendar-container {
+.container {
   border: 1px solid;
   padding: 20px 50px 50px 50px;
   width: 450px;
+  max-height: 490px;
 }
-.name-calendar {
+.title {
   text-align: center;
 }
-.name-calendar > h1 {
+.title-name {
   font-size: 50px;
   letter-spacing: 5px;
 }
-.calendar {
+.name-span {
   font-size: 35px;
   letter-spacing: 2px;
   line-height: 1;
@@ -120,4 +121,52 @@ body {
 .btn-reset:hover {
   background: #fc5c7d;
   color: #fff;
+}
+
+.control-buttons {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.control-btn {
+  flex: 1;
+  max-width: 200px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: #fff;
+}
+/* ------tickets----- */
+.tickets-box {
+  overflow: scroll;
+  max-height: 200px;
+}
+.day-tickets {
+  width: 100%;
+}
+.hour {
+  padding: 5px;
+  border-bottom: 1px solid;
+  display: flex;
+  align-items: center;
+  gap: 2%;
+}
+.hour-span {
+  width: 14%;
+  font-size: 15px;
+}
+.ticket-input {
+  width: 84%;
+  font-size: 20px;
+  color: #fff;
+  background: transparent;
+  outline: none;
+}
+
+.hide {
+  display: none;
 }

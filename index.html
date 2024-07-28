@@ -11,31 +11,33 @@
     <title>F*cking C*lendar</title>
   </head>
   <body>
-    <!-- <button class="language">change language</button> -->
-
-    <div class="calendar-container">
-      <div class="name-calendar">
-        <h1 class="name root-color-text">EБАНЫЙ</h1>
-        <span class="calendar root-color-text">календарь</span>
+    <div class="container">
+      <div class="title">
+        <h1 class="title-name root-color-text"></h1>
+        <span class="name-span root-color-text"></span>
         <span class="year"></span>
+      </div>
+      <div class="navigate">
+        <button class="arrow prev"><i class="las la-caret-left"></i></button>
+
+        <div class="month">
+          <h3 class="castom-title">EБАНЫЙ НОВЫЙ ГОД</h3>
+          <h3 class="name-month root-color-text">январь</h3>
+        </div>
+
+        <button class="arrow next"><i class="las la-caret-right"></i></button>
       </div>
 
       <div class="data-box">
-        <div class="navigate">
-          <button class="arrow prev"><i class="las la-caret-left"></i></button>
-
-          <div class="month">
-            <h3 class="castom-title">EБАНЫЙ НОВЫЙ ГОД</h3>
-            <h3 class="name-month root-color-text">январь</h3>
-          </div>
-
-          <button class="arrow next"><i class="las la-caret-right"></i></button>
-        </div>
-
         <button class="btn-reset">вернуться в ебаное сегодня</button>
       </div>
+
+      <div class="tickets-box hide"></div>
     </div>
 
+    <div class="control-buttons">
+      <button class="control-btn">ебаные задачи</button>
+    </div>
     <script src="./script.js"></script>
   </body>
 </html>
