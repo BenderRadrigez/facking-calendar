@@ -21,6 +21,9 @@ const controlBtn = document.querySelector(".control-btn");
 const date = new Date();
 // актуализируем ее
 let actualDate = getDate();
+
+console.log(actualDate)
+
 //календарь или задачи
 let isCalendar = true;
 
@@ -103,10 +106,14 @@ function getMonthStartOffset(thatYear, month) {
   return ((((f % 7) + 7) % 7) + 6) % 7;
 }
 // ебаные названия месяца или дня недели
-function makeTitle(actual, isMonth=true) {
-  calendar.castomTitle.innerHTML = (
-    isMonth ? names.monthCastom[actual - 1] : names.daysCastom[actual - 1]
-  ).toUpperCase();
+function makeTitle(actual, isMonth = true) {
+
+  console.log(actual)
+  console.log(names.daysCastom[actual - 1])
+
+  const customTitle = isMonth ? names.monthCastom[actual - 1] : names.daysCastom[actual - 1];
+
+  calendar.castomTitle.innerHTML = customTitle ?? customTitle.toUpperCase();
   calendar.nameMonth.innerHTML = isMonth
     ? names.month[actual - 1]
     : names.daysFull[actual - 1];
@@ -145,24 +152,27 @@ function makeCalendar(monthArr) {
     const daysName = conteinerCreator("h6", "days-name");
     daysName.innerHTML = names.days[i];
 
-    const days = document.createElement("ul");
-    days.classList.add("days");
+    const days = conteinerCreator("ul", "days");
 
     for (let j = 0; j < 6; j++) {
       const day = conteinerCreator("li", "day");
+      const dayBtn = conteinerCreator("button", "day-btn");
       // заполнение списков числами
-      day.innerHTML = monthArr[dayNumber + j * 6];
+      dayBtn.innerHTML = monthArr[dayNumber + j * 6];
+      if (monthArr[dayNumber + j * 6] !== null) {
+        day.append(dayBtn);
+      }
       // а это так, выделялка нынешнего дня
-      if (day.innerHTML == actualDate.day) {
+      if (dayBtn.innerHTML == actualDate.day) {
         if (
           //если совпадает год месяц и день - красная
           actualDate.month == getDate().month &&
           actualDate.year == getDate().year
         ) {
-          day.classList.add("active-day");
+          dayBtn.classList.add("active-day");
         } else {
           //если только день - синяя
-          day.classList.add("like-active-day");
+          dayBtn.classList.add("like-active-day");
         }
       }
 
@@ -214,7 +224,6 @@ function getDate() {
       { day: 0, month: 0, year: 0 }
     );
 }
-
 function prevOrNextMonth(monthNumber) {
   if (monthNumber > 12) {
     monthNumber = 1;
@@ -229,6 +238,7 @@ function prevOrNextMonth(monthNumber) {
   removeCalendar();
   makeCalendar(makeMonth(actualDate.year, monthNumber));
 }
+// возвращает индекс для недели если нету то -1
 function numberDayToday() {
   const today = date.toLocaleString("ru-RU", { weekday: "long" });
   return names.daysFull.reduce((acc, el, ind) => {
