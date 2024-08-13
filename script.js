@@ -1,34 +1,15 @@
-const title = {
-  title: document.querySelector(".title"),
-  nameTitle: document.querySelector(".title-name"),
-  nameSpan: document.querySelector(".name-span"),
-  year: document.querySelector(".year"),
-};
-const calendar = {
-  dataBox: document.querySelector(".data-box"),
-  castomTitle: document.querySelector(".castom-title"),
-  nameMonth: document.querySelector(".name-month"),
-  btnPrev: document.querySelector(".prev"),
-  btnNext: document.querySelector(".next"),
-  btnReset: document.querySelector(".btn-reset"),
-};
-const tickets = {
-  ticketsBox: document.querySelector(".tickets-box"),
-};
+const mainContainer = document.querySelector(".container");
 const controlBtn = document.querySelector(".control-btn");
 
-// получаем дату
 const date = new Date();
 // актуализируем ее
 let actualDate = getDate();
-
-console.log(actualDate)
 
 //календарь или задачи
 let isCalendar = true;
 
 // тут все названия и колличества дней в месяце
-const names = {
+const NAMES = {
   days: ["пн", "вт", "ср", "чт", "пт", "сб", "вс"],
   daysFull: [
     "понедельник",
@@ -79,12 +60,278 @@ const names = {
   ],
 };
 
+initializeCalendar(isCalendar);
+
+controlBtn.addEventListener("click", function () {
+  isCalendar = !isCalendar;
+
+  this.innerHTML = isCalendar ? "ебаные задачи" : "ебаный календарь";
+
+  initializeCalendar(isCalendar);
+});
+
+
+// functions
+
+function initializeCalendar(isCalendar) {
+  renderViewTitle();
+  renderViewSubTitle(date.getMonth());
+  NAMES.daysInMonth[1] = actualDate.year % 4 == 0 ? 29 : 28;
+  isCalendar ? renderViewCalendar() : renderViewTickets();
+
+  subscribeOnEvents();
+}
+
+function subscribeOnEvents() {
+  mainContainer.addEventListener("click", (event) => {
+    if (event.target.localName === "i" || event.target.localName === "button") {
+      switch (event.target.classList.value) {
+        case "las la-caret-left":
+          prevOrNextMonth();
+          break;
+        case "las la-caret-right":
+          prevOrNextMonth(true);
+          break;
+        case "btn-reset":
+          NAMES.daysInMonth[1] = actualDate.year % 4 == 0 ? 29 : 28;
+
+          actualDate = getDate();
+
+          removeContainer(".navigate");
+          removeContainer(".weeks");
+
+          renderViewSubTitle(actualDate.month - 1);
+          renderViewCalendar();
+          break;
+        case "day-btn":
+          console.log(event.target.innerText);
+          break;
+        case "day-btn active-day":
+          console.log(event.target.innerText);
+          break;
+        default:
+          break;
+      }
+    }
+  });
+}
+
+// создание и отрисовка календаря
+function makeCalendar(monthArr) {
+  const weeks = conteinerCreator("ul", "weeks");
+
+  let dayNumber = 0;
+
+  for (let i = 0; i < 7; i++) {
+    dayNumber = i;
+    // добавление всякой херни в контейнер
+    const daysName = conteinerCreator("h6", "days-name");
+    daysName.innerHTML = NAMES.days[i];
+
+    const days = conteinerCreator("ul", "days");
+
+    for (let j = 0; j < 6; j++) {
+      const day = conteinerCreator("li", "day");
+      const dayBtn = conteinerCreator("button", "day-btn");
+      // заполнение списков числами
+      dayBtn.innerHTML = monthArr[dayNumber + j * 6];
+      if (monthArr[dayNumber + j * 6] !== null) {
+        day.append(dayBtn);
+      }
+      // а это так, выделялка нынешнего дня
+      if (dayBtn.innerHTML == actualDate.day) {
+        if (
+          //если совпадает год месяц и день - красная
+          actualDate.month === getDate().month &&
+          actualDate.year === getDate().year
+        ) {
+          dayBtn.classList.add("active-day");
+        }
+      }
+
+      dayNumber++;
+      days.append(day);
+    }
+    days.prepend(daysName);
+    weeks.appendChild(days);
+  }
+
+  return weeks;
+}
+
+// ебаные названия месяца или дня недели
+function makeCastomTitle(actual, isMonth = true) {
+  const castomTitle = isMonth
+    ? NAMES.monthCastom[actual - 1]
+    : NAMES.daysCastom[actual - 1];
+
+  document.querySelector(".castom-title").innerHTML =
+    castomTitle.toUpperCase() ?? castomTitle;
+  document.querySelector(".name-month").innerHTML = isMonth
+    ? NAMES.month[actual - 1]
+    : NAMES.daysFull[actual - 1];
+}
+
+// создание списка дней в месяце с пустыми днями недели
+function makeMonth(thatYear, month) {
+  const listForShowingCalendar = [];
+
+  const dayOff = getMonthStartOffset(thatYear, month);
+  let daysInMonth = NAMES.daysInMonth[month - 1];
+
+  for (let i = 0; i < daysInMonth; i++) {
+    listForShowingCalendar.push(i + 1);
+  }
+  for (let i = 0; i < dayOff; i++) {
+    listForShowingCalendar.unshift(null);
+  }
+
+  let lastDayOff = 42 - listForShowingCalendar.length;
+  if (listForShowingCalendar.length < 42) {
+    for (let i = 0; i < lastDayOff; i++) {
+      listForShowingCalendar.push(null);
+    }
+  }
+  return listForShowingCalendar;
+}
+
+// создание и отрисовка задач
+function makeTickets() {
+  const dayTickets = conteinerCreator("ul", "day-tickets");
+
+  for (let i = 0; i < 24; i++) {
+    const hour = conteinerCreator("li", "hour");
+    const hourSpan = conteinerCreator("span", "hour-span");
+    const ticketInput = conteinerCreator("input", "ticket-input");
+
+    hourSpan.innerHTML = i < 10 ? `0${i}:00` : `${i}:00`;
+
+    hour.append(hourSpan);
+    hour.append(ticketInput);
+    dayTickets.append(hour);
+  }
+  return dayTickets;
+}
+
 function conteinerCreator(nameElement, nameClass = "") {
   const element = document.createElement(nameElement);
   element.classList.add(nameClass);
 
   return element;
 }
+
+// получить актуальную дату
+function getDate() {
+  const d = new Date();
+  return {
+    day: d.getUTCDate(),
+    month: d.getMonth() + 1,
+    year: d.getFullYear(),
+  };
+}
+
+function prevOrNextMonth(increment) {
+  increment ? actualDate.month++ : actualDate.month--;
+
+  let monthNumber = actualDate.month;
+
+  if (monthNumber > 12) {
+    monthNumber = 1;
+    actualDate.year++;
+  } else if (monthNumber < 1) {
+    monthNumber = 12;
+    actualDate.year--;
+  }
+
+  actualDate.month = monthNumber;
+  NAMES.daysInMonth[1] = actualDate.year % 4 == 0 ? 29 : 28;
+  makeCastomTitle(monthNumber);
+  removeContainer(".weeks");
+  renderViewCalendar();
+}
+
+// возвращает индекс для недели если нету то -1
+function numberDayToday() {
+  const today = date.toLocaleString("ru-RU", { weekday: "long" });
+  return NAMES.daysFull.reduce((acc, el, ind) => {
+    acc = el.includes(today) ? ind : acc;
+    return acc;
+  }, -1);
+}
+
+function renderViewTitle() {
+  removeContainer(".title");
+  const template = `
+        <div class="title">
+            <h1 class="title-name root-color-text"> ${
+              isCalendar ? "EБАНЫЙ" : "EБАНЫЕ"
+            }</h1>
+            <span class="name-span root-color-text">${
+              isCalendar ? "календарь" : "задачи"
+            }</span>
+            <span class="year">${actualDate.year}</span>
+         </div>
+    `;
+  renderTemplate(mainContainer, template);
+}
+
+function renderViewSubTitle(monthOrDayNumber) {
+  removeContainer(".navigate");
+
+  const template = `<div class="navigate">
+        <button class="arrow prev"><i class="las la-caret-left"></i></button>
+
+        <div class="month">
+          <h3 class="castom-title">${
+            isCalendar
+              ? NAMES.monthCastom[monthOrDayNumber].toUpperCase()
+              : NAMES.daysCastom[monthOrDayNumber - 1].toUpperCase()
+          }</h3>
+          <h3 class="name-month root-color-text">${
+            isCalendar
+              ? NAMES.month[monthOrDayNumber]
+              : NAMES.daysFull[monthOrDayNumber - 1]
+          }</h3>
+        </div>
+
+        <button class="arrow next"><i class="las la-caret-right"></i></button>
+      </div>`;
+  renderTemplate(mainContainer, template);
+}
+
+function renderViewCalendar() {
+  removeContainer(".tickets-box");
+  removeContainer(".data-box");
+
+  const template = `<div class="data-box">${
+    makeCalendar(makeMonth(actualDate.year, actualDate.month)).outerHTML
+  }
+        <button class="btn-reset">вернуться в ебаное сегодня</button>
+      </div>`;
+  renderTemplate(mainContainer, template);
+}
+
+function renderViewTickets() {
+  removeContainer(".data-box");
+
+  const template = `<div class="tickets-box">${makeTickets().outerHTML}</div>
+    </div>`;
+  renderTemplate(mainContainer, template);
+}
+
+//create template
+function renderTemplate(container, template) {
+  container.insertAdjacentHTML("beforeend", template);
+}
+
+// removed container
+function removeContainer(containerClass) {
+  const container = document.querySelector(containerClass);
+  if (container) {
+    container.remove();
+  }
+}
+
 // костыль для рассчета дня недели для даты
 function getMonthStartOffset(thatYear, month) {
   const firstDay = 0;
@@ -105,190 +352,3 @@ function getMonthStartOffset(thatYear, month) {
 
   return ((((f % 7) + 7) % 7) + 6) % 7;
 }
-// ебаные названия месяца или дня недели
-function makeTitle(actual, isMonth = true) {
-
-  console.log(actual)
-  console.log(names.daysCastom[actual - 1])
-
-  const customTitle = isMonth ? names.monthCastom[actual - 1] : names.daysCastom[actual - 1];
-
-  calendar.castomTitle.innerHTML = customTitle ?? customTitle.toUpperCase();
-  calendar.nameMonth.innerHTML = isMonth
-    ? names.month[actual - 1]
-    : names.daysFull[actual - 1];
-}
-// создание списка дней в месяце с пустыми днями недели
-function makeMonth(thatYear, month) {
-  const listForShowingCalendar = [];
-
-  const dayOff = getMonthStartOffset(thatYear, month);
-  let daysInMonth = names.daysInMonth[month - 1];
-
-  for (let i = 0; i < daysInMonth; i++) {
-    listForShowingCalendar.push(i + 1);
-  }
-  for (let i = 0; i < dayOff; i++) {
-    listForShowingCalendar.unshift(null);
-  }
-
-  let lastDayOff = 42 - listForShowingCalendar.length;
-  if (listForShowingCalendar.length < 42) {
-    for (let i = 0; i < lastDayOff; i++) {
-      listForShowingCalendar.push(null);
-    }
-  }
-  return listForShowingCalendar;
-}
-// создание и отрисовка календаря
-function makeCalendar(monthArr) {
-  const weeks = conteinerCreator("ul", "weeks");
-
-  let dayNumber = 0;
-
-  for (let i = 0; i < 7; i++) {
-    dayNumber = i;
-    // добавление всякой херни в контейнер
-    const daysName = conteinerCreator("h6", "days-name");
-    daysName.innerHTML = names.days[i];
-
-    const days = conteinerCreator("ul", "days");
-
-    for (let j = 0; j < 6; j++) {
-      const day = conteinerCreator("li", "day");
-      const dayBtn = conteinerCreator("button", "day-btn");
-      // заполнение списков числами
-      dayBtn.innerHTML = monthArr[dayNumber + j * 6];
-      if (monthArr[dayNumber + j * 6] !== null) {
-        day.append(dayBtn);
-      }
-      // а это так, выделялка нынешнего дня
-      if (dayBtn.innerHTML == actualDate.day) {
-        if (
-          //если совпадает год месяц и день - красная
-          actualDate.month == getDate().month &&
-          actualDate.year == getDate().year
-        ) {
-          dayBtn.classList.add("active-day");
-        } else {
-          //если только день - синяя
-          dayBtn.classList.add("like-active-day");
-        }
-      }
-
-      dayNumber++;
-      days.append(day);
-    }
-    days.prepend(daysName);
-    weeks.appendChild(days);
-  }
-
-  calendar.dataBox.append(weeks);
-}
-// создание и отрисовка задач
-function makeTickets() {
-  const dayTickets = conteinerCreator("ul", "day-tickets");
-
-  for (let i = 0; i < 24; i++) {
-    const hour = conteinerCreator("li", "hour");
-    const hourSpan = conteinerCreator("span", "hour-span");
-    const ticketInput = conteinerCreator("input", "ticket-input");
-
-    hourSpan.innerHTML = i < 10 ? `0${i}:00` : `${i}:00`;
-
-    hour.append(hourSpan);
-    hour.append(ticketInput);
-    dayTickets.append(hour);
-  }
-  return dayTickets;
-}
-// стререть ебаный месяц с экрана
-function removeCalendar() {
-  document.querySelector(".weeks").remove();
-}
-// получить актуальную дату
-function getDate() {
-  // не спрашивай какого хуя так, когда можно через обычную GetUTC. потому что, бля, эта хуйня точнее работает, все варианты Get выдают не точный месяц, точнее пишет-то ок, но хуйню. на месяц назад. почему-то он живет еще в 6 месяцу.
-  return date
-    .toLocaleDateString()
-    .split(".")
-    .reduce(
-      (acc, el, ind) => {
-        ind === 0
-          ? (acc.day = +el)
-          : ind === 1
-          ? (acc.month = +el)
-          : (acc.year = +el);
-        return acc;
-      },
-      { day: 0, month: 0, year: 0 }
-    );
-}
-function prevOrNextMonth(monthNumber) {
-  if (monthNumber > 12) {
-    monthNumber = 1;
-    actualDate.year++;
-  } else if (monthNumber < 1) {
-    monthNumber = 12;
-    actualDate.year--;
-  }
-  title.year.innerHTML = actualDate.year;
-  names.daysInMonth[1] = actualDate.year % 4 == 0 ? 29 : 28;
-  makeTitle(monthNumber);
-  removeCalendar();
-  makeCalendar(makeMonth(actualDate.year, monthNumber));
-}
-// возвращает индекс для недели если нету то -1
-function numberDayToday() {
-  const today = date.toLocaleString("ru-RU", { weekday: "long" });
-  return names.daysFull.reduce((acc, el, ind) => {
-    acc = el.includes(today) ? ind : acc;
-    return acc;
-  }, -1);
-}
-
-//базовая загрузка
-title.nameTitle.innerHTML = "EБАНЫЙ";
-title.nameSpan.innerHTML = "календарь";
-names.daysInMonth[1] = actualDate.year % 4 == 0 ? 29 : 28;
-title.year.innerHTML = actualDate.year;
-makeTitle(actualDate.month);
-makeCalendar(makeMonth(actualDate.year, actualDate.month));
-tickets.ticketsBox.append(makeTickets());
-
-// ну и кнопки, тут и так понятно
-calendar.btnNext.addEventListener("click", () => {
-  actualDate.month++;
-  prevOrNextMonth(actualDate.month);
-});
-calendar.btnPrev.addEventListener("click", () => {
-  actualDate.month--;
-  prevOrNextMonth(actualDate.month);
-});
-calendar.btnReset.addEventListener("click", () => {
-  names.daysInMonth[1] = actualDate.year % 4 == 0 ? 29 : 28;
-  actualDate = getDate();
-  title.year.innerHTML = actualDate.year;
-  makeTitle(actualDate.month);
-  removeCalendar();
-  makeCalendar(makeMonth(actualDate.year, actualDate.month));
-});
-controlBtn.addEventListener("click", () => {
-  isCalendar = !isCalendar;
-  makeTitle(isCalendar ? actualDate.month : numberDayToday() + 1, isCalendar);
-  title.nameTitle.innerHTML = isCalendar ? "EБАНЫЙ" : "EБАНЫЕ";
-  title.nameSpan.innerHTML = isCalendar ? "календарь" : "задачи";
-  controlBtn.innerHTML = isCalendar ? "ебаные задачи" : "ебаный календарь";
-
-  if (isCalendar) {
-    title.year.innerHTML = actualDate.year;
-    title.year.classList.remove("hide");
-    calendar.dataBox.classList.remove("hide");
-    tickets.ticketsBox.classList.add("hide");
-  } else {
-    title.year.innerHTML = date.toLocaleDateString();
-    console.log();
-    calendar.dataBox.classList.add("hide");
-    tickets.ticketsBox.classList.remove("hide");
-  }
-});

@@ -12,8 +12,6 @@
   font-style: normal;
 }
 
-
-
 .root-color-text {
   background: -webkit-linear-gradient(to right, #fc5c7d, #6a82fb);
   background: linear-gradient(to right, #fc5c7d, #6a82fb);
@@ -37,13 +35,13 @@ body {
   border: 1px solid;
   padding: 20px 40px 50px 40px;
   width: 400px;
-  max-height: 490px;
+  max-height: 500px;
 }
 .title {
   text-align: center;
 }
 .title-name {
-  font-size: 50px;
+  font-size: 40px;
   letter-spacing: 5px;
 }
 .name-span {
@@ -66,11 +64,15 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   gap: 20px;
 }
 .month {
   text-align: center;
   margin: 10px 0;
+}
+.castom-title{
+  font-size: 17px;
 }
 .arrow {
   color: #fff;
@@ -79,6 +81,7 @@ body {
   font-size: 35px;
   cursor: pointer;
 }
+
 .weeks {
   width: 100%;
   display: flex;
@@ -111,10 +114,6 @@ body {
   background: #fc5c7d;
   color: #2b2a28;
 }
-.like-active-day {
-  background: #6a82fb;
-  color: #2b2a28;
-}
 
 .btn-reset {
   position: absolute;
@@ -131,18 +130,13 @@ body {
   color: #fff;
 }
 
-.control-buttons {
-  position: fixed;
-  bottom: 20px;
-  width: 100%;
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-}
 
 .control-btn {
-  flex: 1;
-  max-width: 200px;
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
   padding: 10px;
   border-radius: 10px;
   cursor: pointer;
@@ -174,8 +168,4 @@ body {
   background: transparent;
   border: none;
   outline: none;
-}
-
-.hide {
-  display: none;
 }
